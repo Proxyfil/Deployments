@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ntfy-stateful
+  labels:
+    app: ntfy-stateful
+spec:
+  template:
+    spec:
+      containers:
+        - name: ntfy 
+          image: binwiederhier/ntfy:v2.11.0
+          args: ["serve"]
+          env:
+            - name: NTFY_DEBUG
+              value: "false"
+            - name: NTFY_LOG_LEVEL
+              value: INFO
+            - name: NTFY_BASE_URL
+              value: http://ntfy.proxyfil.fr 
+          resources:
+            limits:
+              memory: 400Mi
+              cpu:  300m
+            requests:
+                  cpu: 150m
+                  memory: 150Mi
+  volumeClaimTemplates:
+  - metadata:
+      name: cache-volume
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+  - metadata:
+      name: app-volume
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ntfy-stateful
+  labels:
+    app: ntfy-stateful
+spec:
+  template:
+    spec:
+      containers:
+        - name: ntfy 
+          image: binwiederhier/ntfy:v2.11.0
+          args: ["serve"]
+          env:
+            - name: NTFY_DEBUG
+              value: "true"
+            - name: NTFY_LOG_LEVEL
+              value: TRACE
+            - name: NTFY_BASE_URL
+              value: https://ntfy-dev.proxyfil.fr 
+          resources:
+            limits:
+              memory: 300Mi
+              cpu:  200m
+            requests:
+                  cpu: 150m
+                  memory: 150Mi

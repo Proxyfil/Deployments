@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: ntfy-svc  
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: ntfy-pod
   ports:

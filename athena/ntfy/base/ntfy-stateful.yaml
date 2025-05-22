@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ntfy-stateful
+  labels:
+    app: ntfy-stateful
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ntfy-pod
+  template:
+    metadata:
+      labels:
+        app: ntfy-pod
+    spec:
+      containers:
+        - name: ntfy 
+          image: binwiederhier/ntfy:v2.11.0 # Version de NTFY à déployer
+          args: ["serve"]
+          env: 
+            - name: TZ # Timezone
+              value: UTC+2
+            - name: NTFY_DEBUG
+              value: "false"
+            - name: NTFY_LOG_LEVEL
+              value: INFO
+            - name: NTFY_BASE_URL
+              value: https://ntfy-dev.cirad.fr 
+            - name: NTFY_AUTH_DEFAULT_ACCESS # Restrictions appliquées par défaut
+              value: deny-all
+            - name: NTFY_ENABLE_LOGIN
+              value: "true"
+            - name: NTFY_AUTH_FILE # Base de données des utilisateurs
+              value: /var/lib/ntfy/auth.db
+          ports: 
+            - containerPort: 80
+              name: http-ntfy
+          resources:
+            limits:
+              memory: 300Mi
+              cpu:  200m
+            requests:
+                  cpu: 150m
+                  memory: 150Mi
+          volumeMounts:
+              - mountPath: /etc/ntfy/server.yml # Configuration serveur
+                subPath: server.yml
+                name: config-volume
+              - mountPath: /var/cache/ntfy # Espace pour le cache
+                name: cache-volume
+              - mountPath : /var/lib/ntfy # Espace pour l'application
+                name: app-volume
+      volumes:
+        - name: config-volume
+          configMap: 
+            name: server-config
+  volumeClaimTemplates:
+  - metadata:
+      name: cache-volume
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+  - metadata:
+      name: app-volume
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
