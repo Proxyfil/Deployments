@@ -42,6 +42,8 @@ spec:
         - name: proxy-config
           configMap:
             name: proxy-config
+        - name: proxy-plugins
+          emptyDir: {}
   volumeClaimTemplates:
   - metadata:
       name: proxy-data
