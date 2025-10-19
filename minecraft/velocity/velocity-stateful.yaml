@@ -32,6 +32,9 @@ spec:
             - name: proxy-config
               mountPath: /config/velocity.toml
               subPath: velocity.toml
+            - name: proxy-plugins
+              mountPath: /server/plugins
+              subPath: plugins
       volumes:
         - name: proxy-data
           persistentVolumeClaim:
