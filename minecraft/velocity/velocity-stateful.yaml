@@ -66,3 +66,15 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: "./plugins"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: velocity-plugins
+spec:
+  storageClassName: manual
+  resources:
+    requests:
+      storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
