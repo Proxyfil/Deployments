@@ -33,7 +33,8 @@ spec:
               mountPath: /config/velocity.toml
               subPath: velocity.toml
             - name: velocity-plugins
-              mountPath: /plugins
+              mountPath: /server/plugins
+              hostPath: ./plugins
       volumes:
         - name: proxy-data
           persistentVolumeClaim:
@@ -53,28 +54,11 @@ spec:
       resources:
         requests:
           storage: 1Gi
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: velocity-plugins
-spec:
-  storageClassName: manual
-  capacity:
-    storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: "./plugins"
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: velocity-plugins
-spec:
-  storageClassName: manual
-  resources:
-    requests:
-      storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
+  - metadata:
+      name: velocity-plugins
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
