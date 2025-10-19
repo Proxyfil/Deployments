@@ -3,7 +3,6 @@ kind: Kustomization
 resources:
   - velocity-stateful.yaml
   - velocity-svc.yaml
-  - tcp-services.yaml
 
 configMapGenerator:
     - name: proxy-config
