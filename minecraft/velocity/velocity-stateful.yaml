@@ -26,12 +26,15 @@ spec:
               value: "1G"
           ports:
             - containerPort: 25565
+            - containerPort: 9985
           volumeMounts:
             - name: proxy-data
               mountPath: /server
             - name: proxy-config
               mountPath: /config/velocity.toml
               subPath: velocity.toml
+            - name: proxy-plugins
+              mountPath: /server/plugins
       volumes:
         - name: proxy-data
           persistentVolumeClaim:
@@ -39,6 +42,9 @@ spec:
         - name: proxy-config
           configMap:
             name: proxy-config
+        - name: proxy-plugins
+          hostPath:
+            path: /opt/minecraft/velocity/plugins
   volumeClaimTemplates:
   - metadata:
       name: proxy-data

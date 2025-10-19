@@ -14,6 +14,10 @@ spec:
       targetPort: 25565
       protocol: TCP
       nodePort: 30065
+    - name: metrics
+      port: 9985
+      targetPort: 9985
+      nodePort: 30985
   type: NodePort
   selector:
     app: velocity-proxy
