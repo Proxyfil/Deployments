@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: velocity-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: velocity-proxy
+  template:
+    metadata:
+      labels:
+        app: velocity-proxy
+    spec:
+      containers:
+        - name: velocity-proxy
+          image: itzg/mc-proxy
+          env:
+            - name: BUNGEE_JAR_REVISION
+              value: "1"
+            - name: REPLACE_ENV_VARIABLES
+              value: "true"
+            - name: "TYPE"
+              value: "VELOCITY"
+            - name: "MEMORY"
+              value: "1G"
+          ports:
+            - containerPort: 25565
+          volumeMounts:
+            - name: proxy-data
+              mountPath: /server
+            - name: proxy-config
+              mountPath: /config/velocity.toml
+              subPath: velocity.toml
+      volumes:
+        - name: proxy-data
+          persistentVolumeClaim:
+            claimName: proxy-data
+        - name: proxy-config
+          configMap:
+            name: proxy-config
+  volumeClaimTemplates:
+  - metadata:
+      name: proxy-data
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
