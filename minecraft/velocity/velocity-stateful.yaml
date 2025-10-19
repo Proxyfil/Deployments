@@ -42,8 +42,7 @@ spec:
           configMap:
             name: proxy-config
         - name: proxy-plugins
-          hostPath: ./plugins
-          pathType: Directory
+          emptyDir: {}
   volumeClaimTemplates:
   - metadata:
       name: proxy-data
