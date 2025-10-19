@@ -34,7 +34,6 @@ spec:
               subPath: velocity.toml
             - name: proxy-plugins
               mountPath: /server/plugins
-              subPath: plugins
       volumes:
         - name: proxy-data
           persistentVolumeClaim:
@@ -43,7 +42,8 @@ spec:
           configMap:
             name: proxy-config
         - name: proxy-plugins
-          emptyDir: {}
+          hostPath: plugins
+          pathType: Directory
   volumeClaimTemplates:
   - metadata:
       name: proxy-data
