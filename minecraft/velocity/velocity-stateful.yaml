@@ -42,7 +42,7 @@ spec:
           configMap:
             name: proxy-config
         - name: proxy-plugins
-          hostPath: plugins
+          hostPath: ./plugins
           pathType: Directory
   volumeClaimTemplates:
   - metadata:
