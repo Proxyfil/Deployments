@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: lobby
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lobby
+  template:
+    metadata:
+      labels:
+        app: lobby
+    spec:
+      containers:
+        - name: lobby
+          image: itzg/minecraft-server:java21
+          env:
+            - name: EULA
+              value: "true"
+            - name: TYPE
+              value: "SPIGOT"
+            - name: INIT_MEMORY
+              value: "1G"
+            - name: MAX_MEMORY
+              value: "2G"
+            - name: TZ
+              value: "Europe/Paris"
+            - name: VERSION
+              value: "1.20.4"
+            - name: MAX_PLAYERS
+              value: "50"
+            - name: MOTD
+              value: "§5[ProxyNetwork]§d --- Lobby ---"
+            - name: ALLOW_FLIGHT
+              value: "true"
+            - name: ONLINE_MODE
+              value: "true"
+            - name: SERVER_PORT
+              value: "25565"
+            - name: ALLOW_NETHER
+              value: "false"
+            - name: SPAWN_PROTECTION
+              value: "100"
+          stdin: true
+          tty: true
+          volumeMounts:
+            - name: lobby-data
+              mountPath: /data
+            - name: lobby-plugins
+              mountPath: /plugins
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
+              memory: "2Gi"
+              cpu: "1"
+          livenessProbe:
+            exec:
+              command: ["mc-health"]
+            initialDelaySeconds: 120
+            periodSeconds: 60
+          readinessProbe:
+            exec:
+              command: ["mc-health"]
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 12
+          ports:
+            - containerPort: 25565
+            - containerPort: 9940
+      volumes:
+        - name: lobby-data
+          hostPath:
+            path: /opt/minecraft/lobby/data
+        - name: lobby-plugins
+          hostPath:
+            path: /opt/minecraft/lobby/plugins
