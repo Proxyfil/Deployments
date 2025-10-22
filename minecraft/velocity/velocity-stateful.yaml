@@ -30,27 +30,12 @@ spec:
           volumeMounts:
             - name: proxy-data
               mountPath: /server
-            - name: proxy-config
-              mountPath: /config/velocity.toml
-              subPath: velocity.toml
             - name: proxy-plugins
               mountPath: /server/plugins
       volumes:
         - name: proxy-data
-          persistentVolumeClaim:
-            claimName: proxy-data
-        - name: proxy-config
-          configMap:
-            name: proxy-config
+          hostPath:
+            path: /opt/minecraft/velocity/data
         - name: proxy-plugins
           hostPath:
             path: /opt/minecraft/velocity/plugins
-  volumeClaimTemplates:
-  - metadata:
-      name: proxy-data
-    spec:
-      accessModes:
-        - ReadWriteOnce
-      resources:
-        requests:
-          storage: 1Gi

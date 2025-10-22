@@ -35,13 +35,14 @@ spec:
             - name: ALLOW_FLIGHT
               value: "true"
             - name: ONLINE_MODE
-              value: "true"
+              value: "false"
             - name: SERVER_PORT
               value: "25565"
             - name: ALLOW_NETHER
               value: "false"
             - name: SPAWN_PROTECTION
               value: "100"
+            - name: QU
           stdin: true
           tty: true
           volumeMounts:

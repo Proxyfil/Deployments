@@ -3,10 +3,5 @@ kind: Kustomization
 resources:
   - velocity-stateful.yaml
   - velocity-svc.yaml
-
-configMapGenerator:
-    - name: proxy-config
-      files: 
-        - velocity.toml
   
 namespace: minecraft-network
