@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: bedwars
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bedwars
+  template:
+    metadata:
+      labels:
+        app: bedwars
+    spec:
+      containers:
+        - name: bedwars
+          image: itzg/minecraft-server:java21
+          env:
+            - name: EULA
+              value: "true"
+            - name: TYPE
+              value: "SPIGOT"
+            - name: INIT_MEMORY
+              value: "1G"
+            - name: MAX_MEMORY
+              value: "4G"
+            - name: TZ
+              value: "Europe/Paris"
+            - name: VERSION
+              value: "1.20.4"
+            - name: MAX_PLAYERS
+              value: "50"
+            - name: MOTD
+              value: "§5[ProxyNetwork]§d --- Bedwars ---"
+            - name: ALLOW_FLIGHT
+              value: "true"
+            - name: ONLINE_MODE
+              value: "false"
+            - name: SERVER_PORT
+              value: "25565"
+            - name: ALLOW_NETHER
+              value: "false"
+            - name: SPAWN_PROTECTION
+              value: "20"
+            - name: ALLOW_END
+              value: "false"
+          stdin: true
+          tty: true
+          volumeMounts:
+            - name: bedwars-data
+              mountPath: /data
+            - name: bedwars-plugins
+              mountPath: /plugins
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
+              memory: "4Gi"
+              cpu: "1"
+          livenessProbe:
+            exec:
+              command: ["mc-health"]
+            initialDelaySeconds: 120
+            periodSeconds: 60
+          readinessProbe:
+            exec:
+              command: ["mc-health"]
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 12
+          ports:
+            - containerPort: 25565
+            - containerPort: 9940
+      volumes:
+        - name: bedwars-data
+          hostPath:
+            path: /opt/minecraft/bedwars/data
+        - name: bedwars-plugins
+          hostPath:
+            path: /opt/minecraft/bedwars/plugins
