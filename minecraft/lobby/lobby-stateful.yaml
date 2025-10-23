@@ -42,7 +42,8 @@ spec:
               value: "false"
             - name: SPAWN_PROTECTION
               value: "100"
-            - name: QU
+            - name: ALLOW_END
+              value: "false"
           stdin: true
           tty: true
           volumeMounts:

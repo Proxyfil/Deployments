@@ -3,10 +3,5 @@ kind: Kustomization
 resources:
   - lobby-stateful.yaml
   - lobby-svc.yaml
-
-configMapGenerator:
-  - name: lobby-config
-    envs:
-      - lobby.env
   
 namespace: minecraft-network
