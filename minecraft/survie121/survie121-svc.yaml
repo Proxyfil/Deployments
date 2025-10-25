@@ -2,11 +2,11 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    service: survie-1-21
+    service: survie121
   annotations: {}
   # Such as
   #   mc-router.itzg.me/externalServerName: $(EXTERNAL_SERVICE_NAME)
-  name: survie-1-21
+  name: survie121
 spec:
   ports:
     - name: minecraft
@@ -20,4 +20,4 @@ spec:
       nodePort: 30988
   type: NodePort
   selector:
-    app: survie-1-21
+    app: survie121

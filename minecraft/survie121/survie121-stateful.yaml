@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: survie121
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: survie121
+  template:
+    metadata:
+      labels:
+        app: survie121
+    spec:
+      containers:
+        - name: survie121
+          image: itzg/minecraft-server:java21
+          envFrom:
+            - configMapRef:
+                name: survie121-env
+          stdin: true
+          tty: true
+          volumeMounts:
+            - name: survie121-data
+              mountPath: /data
+            - name: survie121-plugins-config
+              mountPath: /extras/plugins.txt
+              subPath: plugins.txt
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
+              memory: "4Gi"
+              cpu: "2000m"
+          livenessProbe:
+            exec:
+              command: ["mc-health"]
+            initialDelaySeconds: 20
+            periodSeconds: 60
+          readinessProbe:
+            exec:
+              command: ["mc-health"]
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 12
+          ports:
+            - containerPort: 25565
+            - containerPort: 9940
+      volumes:
+        - name: survie121-data
+          hostPath:
+            path: /opt/minecraft/survie121/data
+        - name: survie121-plugins-config
+          configMap:
+            name: survie121-plugins
