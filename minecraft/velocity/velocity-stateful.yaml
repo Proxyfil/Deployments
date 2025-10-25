@@ -24,18 +24,25 @@ spec:
               value: "VELOCITY"
             - name: "MEMORY"
               value: "1G"
+            - name: VELOCITY_BUILD_ID
+              value: "555"
+            - name: VELOCITY_VERSION
+              value: "3.4.0-SNAPSHOT"
+            - name: PLUGINS_FILE
+              value: "/extras/plugins.txt"
           ports:
             - containerPort: 25565
             - containerPort: 9985
           volumeMounts:
             - name: proxy-data
               mountPath: /server
-            - name: proxy-plugins
-              mountPath: /server/plugins
+            - name: proxy-plugins-config
+              mountPath: /extras/plugins.txt
+              subPath: plugins.txt
       volumes:
         - name: proxy-data
           hostPath:
             path: /opt/minecraft/velocity/data
-        - name: proxy-plugins
-          hostPath:
-            path: /opt/minecraft/velocity/plugins
+        - name: proxy-plugins-config
+          configMap:
+            name: proxy-plugins

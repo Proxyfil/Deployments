@@ -14,9 +14,12 @@ To bypass this problem we use a sidecar Docker container to redirect traffic fro
 
 The command to do this is the following :
 
-`docker run -d --name mc-port-forward -p 25565:25565 alpine/socat tcp-listen:25565,fork,reuseaddr tcp-connect:127.0.0.1:30065
-`
+`docker run -d --name mc-port-forward -p 25565:25565 alpine/socat tcp-listen:25565,fork,reuseaddr tcp-connect:127.0.0.1:30065`
 
 ## Plugins
 
-To add plugins to the Velocity proxy, just add the plugin .jar files to the host path `/opt/minecraft/velocity/plugins` on the Kubernetes node where the proxy pod is scheduled to run.
+To add plugins to the Velocity proxy, just add the plugin download link to the file `plugins.txt`.
+
+## Velocity configuration
+
+To configure your velocity the file `velocity.toml` is here to customize the configuration.
