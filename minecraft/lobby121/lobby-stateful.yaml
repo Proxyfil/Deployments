@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: lobby121
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lobby121
+  template:
+    metadata:
+      labels:
+        app: lobby121
+    spec:
+      containers:
+        - name: lobby121
+          image: itzg/minecraft-server:java21
+          envFrom:
+            - configMapRef:
+                name: lobby-121-env
+          stdin: true
+          tty: true
+          volumeMounts:
+            - name: lobby-data
+              mountPath: /data
+            - name: lobby-plugins-config
+              mountPath: /extras/plugins.txt
+              subPath: plugins.txt
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
+              memory: "3Gi"
+              cpu: "2000m"
+          livenessProbe:
+            exec:
+              command: ["mc-health"]
+            initialDelaySeconds: 20
+            periodSeconds: 60
+          readinessProbe:
+            exec:
+              command: ["mc-health"]
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 12
+          ports:
+            - containerPort: 25565
+            - containerPort: 9940
+      volumes:
+        - name: lobby-data
+          hostPath:
+            path: /opt/minecraft/lobby121/data
+        - name: lobby-plugins-config
+          configMap:
+            name: lobby-121-plugins
