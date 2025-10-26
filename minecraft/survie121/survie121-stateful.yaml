@@ -28,10 +28,10 @@ spec:
               subPath: plugins.txt
           resources:
             requests:
-              memory: "1Gi"
-              cpu: "500m"
-            limits:
               memory: "4Gi"
+              cpu: "1000m"
+            limits:
+              memory: "10Gi"
               cpu: "2000m"
           livenessProbe:
             exec:
