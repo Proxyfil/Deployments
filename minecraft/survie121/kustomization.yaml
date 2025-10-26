@@ -4,4 +4,12 @@ resources:
   - survie121-stateful.yaml
   - survie121-svc.yaml
 
+configMapGenerator:
+  - name: survie121-plugins
+    files:
+      - ./plugins.txt
+  - name: survie121-env
+    envs:
+      - ./.survival-env
+
 namespace: minecraft-network
