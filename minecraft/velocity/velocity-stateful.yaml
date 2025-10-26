@@ -25,24 +25,36 @@ spec:
             - name: "MEMORY"
               value: "1G"
             - name: VELOCITY_BUILD_ID
-              value: "555"
+              value: "552"
             - name: VELOCITY_VERSION
               value: "3.4.0-SNAPSHOT"
             - name: PLUGINS_FILE
               value: "/extras/plugins.txt"
+            - name: TZ
+              value: "Europe/Paris"
+            - name: JVM_OPTS
+              value: "-Dvelocity.packet-decode-logging=true"
+          stdin: true
+          tty: true
           ports:
             - containerPort: 25565
             - containerPort: 9985
           volumeMounts:
-            - name: proxy-data
+            - name: velocity-data
               mountPath: /server
-            - name: proxy-plugins-config
+            - name: velocity-plugins-config
               mountPath: /extras/plugins.txt
               subPath: plugins.txt
+            - name: velocity-config-volume
+              mountPath: /config/velocity.toml
+              subPath: velocity.toml
       volumes:
-        - name: proxy-data
+        - name: velocity-data
           hostPath:
             path: /opt/minecraft/velocity/data
-        - name: proxy-plugins-config
+        - name: velocity-plugins-config
           configMap:
-            name: proxy-plugins
+            name: velocity-plugins
+        - name: velocity-config-volume
+          configMap:
+            name: velocity-config

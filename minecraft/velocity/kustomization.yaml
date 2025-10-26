@@ -5,8 +5,11 @@ resources:
   - velocity-svc.yaml
 
 configMapGenerator:
-  - name: proxy-plugins
+  - name: velocity-plugins
     files:
       - ./plugins.txt
+  - name: velocity-config
+    files:
+      - ./velocity.toml
   
 namespace: minecraft-network
