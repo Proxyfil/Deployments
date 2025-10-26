@@ -15,49 +15,24 @@ spec:
       containers:
         - name: bedwars
           image: itzg/minecraft-server:java21
-          env:
-            - name: EULA
-              value: "true"
-            - name: TYPE
-              value: "SPIGOT"
-            - name: INIT_MEMORY
-              value: "1G"
-            - name: MAX_MEMORY
-              value: "4G"
-            - name: TZ
-              value: "Europe/Paris"
-            - name: VERSION
-              value: "1.20.4"
-            - name: MAX_PLAYERS
-              value: "50"
-            - name: MOTD
-              value: "§5[ProxyNetwork]§d --- Bedwars ---"
-            - name: ALLOW_FLIGHT
-              value: "true"
-            - name: ONLINE_MODE
-              value: "false"
-            - name: SERVER_PORT
-              value: "25565"
-            - name: ALLOW_NETHER
-              value: "false"
-            - name: SPAWN_PROTECTION
-              value: "20"
-            - name: ALLOW_END
-              value: "false"
+          envFrom:
+            - configMapRef:
+                name: bedwars-env
           stdin: true
           tty: true
           volumeMounts:
             - name: bedwars-data
               mountPath: /data
-            - name: bedwars-plugins
-              mountPath: /plugins
+            - name: bedwars-plugins-config
+              mountPath: /extras/plugins.txt
+              subPath: plugins.txt
           resources:
             requests:
               memory: "1Gi"
               cpu: "500m"
             limits:
               memory: "4Gi"
-              cpu: "1"
+              cpu: "2000m"
           livenessProbe:
             exec:
               command: ["mc-health"]
@@ -76,6 +51,6 @@ spec:
         - name: bedwars-data
           hostPath:
             path: /opt/minecraft/bedwars/data
-        - name: bedwars-plugins
-          hostPath:
-            path: /opt/minecraft/bedwars/plugins
+        - name: bedwars-plugins-config
+          configMap:
+            name: bedwars-plugins

@@ -4,4 +4,12 @@ resources:
   - bedwars-stateful.yaml
   - bedwars-svc.yaml
 
+configMapGenerator:
+  - name: bedwars-plugins
+    files:
+      - ./plugins.txt
+  - name: bedwars-env
+    envs:
+      - ./.bedwars-env
+
 namespace: minecraft-network
