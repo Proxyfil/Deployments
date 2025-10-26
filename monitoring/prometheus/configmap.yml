@@ -13,7 +13,7 @@ data:
           - targets: ['localhost:9090']
       - job_name: 'node-exporter'
         static_configs:
-          - targets: ['node-exporter.monitoring.svc.cluster.local:9100']
+          - targets: ['node-exporter.monitoring.svc.cluster.local:9100','node-exporter-athena.proxyfil.fr']
       - job_name: 'velocity'
         static_configs:
           - targets: ['athena.proxyfil.fr:30985']
