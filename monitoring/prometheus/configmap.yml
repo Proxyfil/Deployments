@@ -27,3 +27,6 @@ data:
           - targets: ['athena.proxyfil.fr:30987']
             labels:
               server_name: 'bedwars'
+          - targets: ['athena.proxyfil.fr:30988']
+            labels:
+              server_name: 'survie'
