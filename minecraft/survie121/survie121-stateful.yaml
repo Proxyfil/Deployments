@@ -47,6 +47,7 @@ spec:
           ports:
             - containerPort: 25565
             - containerPort: 9940
+            - containerPort: 31455
       volumes:
         - name: survie121-data
           hostPath:

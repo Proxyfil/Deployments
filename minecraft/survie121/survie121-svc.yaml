@@ -18,6 +18,11 @@ spec:
       port: 9940
       targetPort: 9940
       nodePort: 30988
+    - name: voicechat
+      port: 31455
+      targetPort: 31455
+      protocol: UDP
+      nodePort: 31455
   type: NodePort
   selector:
     app: survie121
