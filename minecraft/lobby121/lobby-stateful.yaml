@@ -47,6 +47,7 @@ spec:
           ports:
             - containerPort: 25565
             - containerPort: 9940
+            - containerPort: 31454
       volumes:
         - name: lobby-data
           hostPath:

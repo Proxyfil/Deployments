@@ -18,6 +18,11 @@ spec:
       port: 9940
       targetPort: 9940
       nodePort: 30986
+    - name: voicechat
+      port: 31454
+      targetPort: 31454
+      protocol: UDP
+      nodePort: 31454
   type: NodePort
   selector:
     app: lobby121
