@@ -29,9 +29,7 @@ spec:
             - name: DISABLE_SENTRY
               value: "false"
             - name: ENABLE_BACKUP
-              value: "true"
-            - name: BACKUP_FREQUENCY
-              value: "30"
+              value: "false"
             - name: ALLOW_OP
               value: "false"
             - name: PATCHLINE
@@ -53,6 +51,8 @@ spec:
               mountPath: /hytale-server/logs
             - name: hytale-cache
               mountPath: /hytale-server/.cache
+            - name: hytale-backups
+              mountPath: /hytale-server/backups
             - name: mods-config
               mountPath: /hytale-server/mods/nitrado-webserver-1.0.0.jar
               subPath: nitrado-webserver-1.0.0.jar
@@ -95,6 +95,10 @@ spec:
         - name: hytale-cache
           hostPath:
             path: /opt/hytale/cache
+            type: DirectoryOrCreate
+        - name: hytale-backups
+          hostPath:
+            path: /opt/hytale/backups
             type: DirectoryOrCreate
         - name: mods-config
           configMap:
