@@ -1,0 +1,6 @@
+# Hytale Server Mods
+# Add mod download URLs here, one per line
+# The server will automatically download and install these mods
+
+# Nitrado Web Server Mod
+nitrado-webserver-1.0.0.jar

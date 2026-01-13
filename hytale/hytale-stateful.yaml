@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: hytale-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hytale-server
+  serviceName: hytale-server
+  template:
+    metadata:
+      labels:
+        app: hytale-server
+    spec:
+      containers:
+        - name: hytale-server
+          image: proxyfil/docker-hytale-server:latest
+          imagePullPolicy: Always
+          env:
+            - name: JAVA_OPTS
+              value: "-Xms4G -Xmx8G -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
+            - name: SERVER_PORT
+              value: "5520"
+            - name: BIND_ADDRESS
+              value: "0.0.0.0:5520"
+            - name: AUTH_MODE
+              value: "authenticated"
+            - name: DISABLE_SENTRY
+              value: "false"
+            - name: ENABLE_BACKUP
+              value: "true"
+            - name: BACKUP_FREQUENCY
+              value: "30"
+            - name: ALLOW_OP
+              value: "false"
+            - name: PATCHLINE
+              value: "release"
+            - name: TZ
+              value: "Europe/Paris"
+          stdin: true
+          tty: true
+          ports:
+            - containerPort: 5520
+              protocol: UDP
+              name: hytale
+          volumeMounts:
+            - name: hytale-universe
+              mountPath: /hytale-server/universe
+            - name: hytale-mods
+              mountPath: /hytale-server/mods
+            - name: hytale-logs
+              mountPath: /hytale-server/logs
+            - name: hytale-cache
+              mountPath: /hytale-server/.cache
+            - name: mods-config
+              mountPath: /hytale-server/mods/nitrado-webserver-1.0.0.jar
+              subPath: nitrado-webserver-1.0.0.jar
+          resources:
+            requests:
+              cpu: "2000m"
+              memory: "4Gi"
+            limits:
+              cpu: "4000m"
+              memory: "8Gi"
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - "[ -d /hytale-server/Server ] || exit 1"
+            initialDelaySeconds: 120
+            periodSeconds: 30
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - "[ -f /hytale-server/Server/HytaleServer.jar ] || exit 1"
+            initialDelaySeconds: 60
+            periodSeconds: 10
+      volumes:
+        - name: hytale-universe
+          hostPath:
+            path: /opt/hytale/universe
+            type: DirectoryOrCreate
+        - name: hytale-mods
+          hostPath:
+            path: /opt/hytale/mods
+            type: DirectoryOrCreate
+        - name: hytale-logs
+          hostPath:
+            path: /opt/hytale/logs
+            type: DirectoryOrCreate
+        - name: hytale-cache
+          hostPath:
+            path: /opt/hytale/cache
+            type: DirectoryOrCreate
+        - name: mods-config
+          configMap:
+            name: hytale-mods
