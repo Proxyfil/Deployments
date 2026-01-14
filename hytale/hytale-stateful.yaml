@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: hytale-server
-          image: proxyfil/docker-hytale-server:latest
+          image: proxyfil/docker-hytale-server:1.0.1
           imagePullPolicy: Always
           env:
             - name: JAVA_OPTS
@@ -43,18 +43,10 @@ spec:
               protocol: UDP
               name: hytale
           volumeMounts:
-            - name: hytale-universe
-              mountPath: /hytale-server/universe
-            - name: hytale-mods
-              mountPath: /hytale-server/mods
-            - name: hytale-logs
-              mountPath: /hytale-server/logs
-            - name: hytale-cache
-              mountPath: /hytale-server/.cache
-            - name: hytale-backups
-              mountPath: /hytale-server/backups
+            - name: hytale-server-universe
+              mountPath: /hytale-server/Server/universe
             - name: mods-config
-              mountPath: /hytale-server/mods/nitrado-webserver-1.0.0.jar
+              mountPath: /hytale-server/Server/mods/nitrado-webserver-1.0.0.jar
               subPath: nitrado-webserver-1.0.0.jar
           resources:
             requests:
@@ -80,25 +72,9 @@ spec:
             initialDelaySeconds: 60
             periodSeconds: 10
       volumes:
-        - name: hytale-universe
+        - name: hytale-server-universe
           hostPath:
-            path: /opt/hytale/universe
-            type: DirectoryOrCreate
-        - name: hytale-mods
-          hostPath:
-            path: /opt/hytale/mods
-            type: DirectoryOrCreate
-        - name: hytale-logs
-          hostPath:
-            path: /opt/hytale/logs
-            type: DirectoryOrCreate
-        - name: hytale-cache
-          hostPath:
-            path: /opt/hytale/cache
-            type: DirectoryOrCreate
-        - name: hytale-backups
-          hostPath:
-            path: /opt/hytale/backups
+            path: /opt/hytale/Server/universe
             type: DirectoryOrCreate
         - name: mods-config
           configMap:
